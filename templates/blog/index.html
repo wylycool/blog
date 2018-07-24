@@ -1,0 +1,50 @@
+{% extends "blog/base.html" %}
+
+{% block main %}
+    {% for post in post_list %}
+                <article class="post post-{{ post.pk }}">
+                    <header class="entry-header">
+                        <h1 class="entry-title">
+                            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                        </h1>
+                        <div class="entry-meta">
+                            <span class="post-category"><a href="#">{{ post.category }}</a></span>
+                            <span class="post-date"><a href="#"><time class="entry-date"
+                                                                      datetime="2012-11-09T23:15:57+00:00">{{ post.create_time }}</time></a></span>
+                            <span class="post-author"><a href="#">{{ post.author }}</a></span>
+                            <span class="comments-link"><a href="#"> {{ post.comment_set.count }}评论</a></span>
+                            <span class="views-count"><a href="#">{{ post.views }} 阅读</a></span>
+                        </div>
+                    </header>
+                    <div class="entry-content clearfix">
+                        <p>{{ post.excerpt }}...</p>
+                        <div class="read-more cl-effect-14">
+                            <a href="#" class="more-link">继续阅读 <span class="meta-nav">→</span></a>
+                        </div>
+                    </div>
+                </article>
+                {% empty %}
+                    暂无文章
+                {% endfor %}
+    {% if is_paginated %}
+    <div class = 'pagination-simple'>
+        {% if page_obj.has_previous %}
+            <a href="?page=1">首页</a>
+            <a href="?page={{ page_obj.previous_page_number }}">上一页</a>
+        {% endif %}
+        {% for i in page_range %}
+            {% if page_obj.number == i %}
+                <a style="padding: 5px; font-size: 16px; color: red; border: 1px solid red" href="?page={{ i }}">{{ i }}</a>
+            {% else %}
+                <a style="padding: 5px; font-size: 16px; border: 1px solid black" href="?page={{ i }}">{{ i }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">下一页</a>
+            <a href="?page={{ paginator.num_pages }}">尾页</a>
+        {% endif %}
+
+    </div>
+    {% endif %}
+
+{% endblock %}
